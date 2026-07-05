@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { JWT_SECRET } from '../constants';
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
@@ -10,7 +11,6 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'destinix_fallback_secret_key_change_in_prod';
 
 export interface AuthRequest extends Request {
   user?: { id: string; email: string };
