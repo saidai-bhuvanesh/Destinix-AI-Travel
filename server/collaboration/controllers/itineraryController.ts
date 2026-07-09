@@ -1,6 +1,15 @@
 import { Response } from "express";
 import { ItineraryService } from "../services/itineraryService";
 
+// Safe number conversion with validation
+const safeNumber = (value: any, fieldName: string): number => {
+  const num = Number(value);
+  if (isNaN(num)) {
+    throw new Error(`${fieldName} must be a valid number`);
+  }
+  return num;
+};
+
 export class ItineraryController {
   static async createItineraryItem(req: any, res: Response) {
     try {
@@ -12,7 +21,7 @@ export class ItineraryController {
         groupId,
         title,
         description,
-        Number(dayNumber),
+        safeNumber(dayNumber, "dayNumber"),
         createdBy
       );
       
@@ -37,7 +46,7 @@ export class ItineraryController {
         itemId,
         title,
         description,
-        Number(dayNumber),
+        safeNumber(dayNumber, "dayNumber"),
         updatedBy
       );
 
