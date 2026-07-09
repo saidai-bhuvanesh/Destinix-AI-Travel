@@ -32,6 +32,7 @@ import GroupDashboard from './components/collaboration/GroupDashboard';
 import CommunityFeed from './components/CommunityFeed';
 import JournalDetails from './components/JournalDetails';
 import CreateJournal from './components/CreateJournal';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Wrapper for PackageDetails to handle slug-based routing
 const PackageDetailsWrapper: React.FC<{
@@ -755,6 +756,7 @@ const App: React.FC = () => {
       )}
       
       <main>
+        <ErrorBoundary>
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -814,6 +816,7 @@ const App: React.FC = () => {
           onNavigate={handleNavPageChange} 
           onRegisterClick={() => setShowAuth(true)} 
         />
+        </ErrorBoundary>
       </main>
 
       {showAuth && (
