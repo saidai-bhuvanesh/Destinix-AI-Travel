@@ -14,6 +14,7 @@ const Contact: React.FC = () => {
 
   const [errors, setErrors] = useState<any>({});
   const [success, setSuccess] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
   // Phone Validation (10 digits OR +91XXXXXXXXXX)
   const validatePhone = (phone: string) => {
@@ -61,6 +62,7 @@ const Contact: React.FC = () => {
       }
     } catch (error) {
       console.error(error);
+      setSubmitError(t('contact.errorSubmitFailed') || "Failed to send message. Please try again later.");
     }
   };
 
@@ -168,6 +170,10 @@ const Contact: React.FC = () => {
 
               {success && (
                 <p className="text-green-400 text-sm mt-2">{success}</p>
+              )}
+
+              {submitError && (
+                <p className="text-red-400 text-sm mt-2">{submitError}</p>
               )}
 
             </div>
