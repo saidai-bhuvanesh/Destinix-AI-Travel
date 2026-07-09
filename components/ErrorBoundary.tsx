@@ -27,9 +27,8 @@ export class ErrorBoundary extends Component<Props, State> {
     this.props.onError?.(error, errorInfo);
   }
 
-  private handleReload = () => {
+  private handleReset = () => {
     this.setState({ hasError: false, error: null });
-    window.location.reload();
   };
 
   public render() {
@@ -50,13 +49,21 @@ export class ErrorBoundary extends Component<Props, State> {
             <p className="text-gray-600 mb-4">
               {this.state.error?.message || 'An unexpected error occurred'}
             </p>
-            <button
-              onClick={this.handleReload}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Reload Page
-            </button>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={this.handleReset}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Try Again
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+              >
+                Reload Page
+              </button>
+            </div>
           </div>
         </div>
       );
