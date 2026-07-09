@@ -12,19 +12,24 @@ interface CommunityFeedProps {
 const CommunityFeed: React.FC<CommunityFeedProps> = ({ onNavigate }) => {
   const [journals, setJournals] = useState<TripJournal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const fetchJournals = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getPublicJournals();
+      setJournals(data);
+    } catch (err) {
+      console.error("Failed to fetch journals", err);
+      setError("Failed to load journals. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchJournals = async () => {
-      try {
-        const data = await getPublicJournals();
-        setJournals(data);
-      } catch (err) {
-        console.error("Failed to fetch journals", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchJournals();
   }, []);
 
@@ -39,7 +44,7 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ onNavigate }) => {
           </p>
         </div>
         <button
-          onClick={() => navigate('/profile')} // Assumes they create it from their profile
+          onClick={() => navigate('/journals/new')}
           className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-500 transition-colors shadow-[0_0_15px_rgba(79,70,229,0.3)] shrink-0"
         >
           Share Your Journey
@@ -51,6 +56,20 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ onNavigate }) => {
           {[...Array(6)].map((_, i) => (
             <div key={i} className="bg-white/5 border border-white/10 rounded-3xl h-80 animate-pulse"></div>
           ))}
+        </div>
+      ) : error ? (
+        <div className="py-32 flex flex-col items-center justify-center bg-white/5 border border-white/10 border-dashed rounded-[40px] text-center">
+          <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
+            <span className="text-4xl">⚠️</span>
+          </div>
+          <h3 className="text-2xl font-serif font-bold text-white mb-2">Something went wrong</h3>
+          <p className="text-gray-400 max-w-md mb-8">{error}</p>
+          <button
+            onClick={fetchJournals}
+            className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-500 transition-colors"
+          >
+            Try Again
+          </button>
         </div>
       ) : journals.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -107,7 +126,7 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ onNavigate }) => {
           <h3 className="text-2xl font-serif font-bold text-white mb-2">No journals yet!</h3>
           <p className="text-gray-500 max-w-md mb-8">Be the first to share your amazing travel experiences with the Destinix community.</p>
           <button 
-            onClick={() => navigate('/profile')}
+            onClick={() => navigate('/journals/new')}
             className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-500 transition-colors"
           >
             Start Writing
