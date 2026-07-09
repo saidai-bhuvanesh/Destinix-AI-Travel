@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import dotenv from 'dotenv';
+import { JWT_SECRET } from '../constants';
 
 dotenv.config();
 
@@ -14,7 +15,6 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'destinix_fallback_secret_key_change_in_prod';
 
 // Helper to generate token
 const generateToken = (userId: string, email: string) => {
